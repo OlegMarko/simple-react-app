@@ -1,26 +1,43 @@
 import React from 'react'
 
-class Article extends React.Component {
+class Article extends React.PureComponent {
     constructor(props) {
         super(props)
 
         this.state = {
-            isOpen: false
+            count: 0
         }
     }
 
+    componentWillMount() {
+        console.log('Component is mounting')
+    }
+
+    componentDidMount() {
+        console.log('Component mounted')
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log('will receive props')
+    }
+
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        console.log('will update')
+    }
+
     render() {
-        const {article} = this.props
+        const {article, isOpen, onButtonClick} = this.props
         const style = {width: '50%', margin: '0 auto'}
-        const body = this.state.isOpen && <section>{article.text}</section>
+        const body = isOpen && <section>{article.text}</section>
 
         return (
             <div className='card' style={style}>
                 <div className="card-header">
-                    <h2>
+                    <h2 onClick={this.incrementCounter}>
                         {article.title}
-                        <button onClick={this.handleClick} className="btn btn-primary btn-lg float-right">
-                            {this.state.isOpen ? 'Close' : 'Open'}
+                        <span className="alert-success p-1">{this.state.count}</span>
+                        <button onClick={onButtonClick} className="btn btn-primary btn-lg float-right">
+                            {isOpen ? 'Close' : 'Open'}
                         </button>
                     </h2>
                 </div>
@@ -36,9 +53,9 @@ class Article extends React.Component {
         )
     }
 
-    handleClick = () => {
+    incrementCounter = () => {
         this.setState({
-            isOpen: !this.state.isOpen
+            count: this.state.count + 1
         })
     }
 }
